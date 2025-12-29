@@ -15,7 +15,7 @@ module "eks" {
   vpc_id                          = module.vpc.vpc_id
   private_subnets                 = module.vpc.private_subnets
   cluster_endpoint_private_access = true
-  cluster_endpoint_public_access  = false
+  cluster_endpoint_public_access  = true
 }
 
 module "nodegroup" {
@@ -42,3 +42,9 @@ module "alb_controller" {
   oidc_provider_arn = module.eks.oidc_provider_arn
 }
 
+
+module "ecr" {
+  source = "../../modules/ecr"
+
+  repository_names = ["frontend", "catalogue", "voting", "recommendation"]
+}

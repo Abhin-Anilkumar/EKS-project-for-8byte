@@ -14,3 +14,7 @@ output "db_password" {
   value     = module.rds.password
   sensitive = true
 }
+
+output "ecr_repository_urls" {
+  value = module.ecr.repository_urls
+}
