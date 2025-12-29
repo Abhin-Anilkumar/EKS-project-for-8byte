@@ -1,0 +1,15 @@
+# Terraform artifacts
+.terraform/
+*.tfplan
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+crash.log
+
+# Override files
+override.tf
+override.tf.json
+
+# Editor backup files
+.*.swp
+*.bak
