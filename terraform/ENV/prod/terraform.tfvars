@@ -1,10 +1,10 @@
-aws_region     = "us-west-1"
-cluster_name   = "prod-eks"
+aws_region      = "us-east-1"
+cluster_name    = "prod-eks"
 cluster_version = "1.34"
 
 vpc_cidr = "10.0.0.0/16"
 
-azs = ["us-west-1c", "us-west-1b"]
+azs = ["us-east-1a", "us-east-1b"]
 
 public_subnets = [
   "10.0.1.0/24",
