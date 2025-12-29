@@ -1,7 +1,15 @@
+data "aws_eks_cluster" "this" {
+  name = var.cluster_name
+}
+
+data "aws_eks_cluster_auth" "this" {
+  name = var.cluster_name
+}
+
 provider "helm" {
   kubernetes {
-    host                   = module.eks.cluster_endpoint
-    cluster_ca_certificate = base64decode(module.eks.cluster_ca_certificate)
+    host                   = data.aws_eks_cluster.this.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.this.certificate_authority[0].data)
     token                  = data.aws_eks_cluster_auth.this.token
   }
 }
@@ -14,12 +22,12 @@ resource "helm_release" "alb" {
 
   set {
     name  = "clusterName"
-    value = module.eks.cluster_name
+    value = var.cluster_name
   }
 
   set {
     name  = "serviceAccount.create"
-    value = "false"
+    value = "true"
   }
 
   set {
@@ -27,4 +35,3 @@ resource "helm_release" "alb" {
     value = "aws-load-balancer-controller"
   }
 }
-

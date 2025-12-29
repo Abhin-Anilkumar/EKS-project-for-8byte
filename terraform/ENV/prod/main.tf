@@ -1,18 +1,18 @@
 module "vpc" {
   source = "../../modules/vpc"
 
-  vpc_cidr = "10.0.0.0/16"
-  azs = ["ap-south-1a", "ap-south-1b"]
+  vpc_cidr = var.vpc_cidr
+  azs      = var.azs
 
-  public_subnets  = ["10.0.1.0/24", "10.0.2.0/24"]
-  private_subnets = ["10.0.11.0/24", "10.0.12.0/24"]
+  public_subnets  = var.public_subnets
+  private_subnets = var.private_subnets
 }
 
 module "eks" {
   source = "../../modules/eks"
 
-  cluster_name    = "prod-eks"
-  cluster_version = "1.29"
+  cluster_name    = var.cluster_name
+  cluster_version = var.cluster_version
 
   vpc_id          = module.vpc.vpc_id
   private_subnets = module.vpc.private_subnets
@@ -22,7 +22,7 @@ module "nodegroup" {
   source = "../../modules/nodegroup"
 
   cluster_name     = module.eks.cluster_name
-  cluster_version  = "1.29"
+  cluster_version  = var.cluster_version
   private_subnets  = module.vpc.private_subnets
 }
 

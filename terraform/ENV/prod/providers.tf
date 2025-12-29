@@ -6,10 +6,13 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.13"
+    }
   }
 }
 
 provider "aws" {
   region = var.aws_region
 }
-
