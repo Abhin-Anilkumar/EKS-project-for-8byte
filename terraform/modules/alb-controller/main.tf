@@ -19,7 +19,7 @@ resource "aws_iam_role" "alb_controller" {
 }
 
 data "http" "iam_policy" {
-  url = "https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/install/iam_policy.json"
+  url = "https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json"
 }
 
 resource "aws_iam_policy" "alb_controller" {
