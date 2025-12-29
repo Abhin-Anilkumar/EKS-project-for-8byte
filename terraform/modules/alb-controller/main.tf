@@ -1,7 +1,7 @@
 resource "aws_iam_role" "alb_controller" {
   name = "eks-alb-controller"
 
-  assume_role_policy = json_encode({
+  assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
       Effect = "Allow"

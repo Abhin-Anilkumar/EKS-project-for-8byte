@@ -9,21 +9,20 @@ module "vpc" {
 }
 
 module "eks" {
-  source = "../../modules/eks"
-
-  cluster_name    = var.cluster_name
-  cluster_version = var.cluster_version
-
-  vpc_id          = module.vpc.vpc_id
-  private_subnets = module.vpc.private_subnets
+  source                          = "../../modules/eks"
+  cluster_name                    = var.cluster_name
+  cluster_version                 = var.cluster_version
+  vpc_id                          = module.vpc.vpc_id
+  private_subnets                 = module.vpc.private_subnets
+  cluster_endpoint_private_access = true
+  cluster_endpoint_public_access  = false
 }
 
 module "nodegroup" {
-  source = "../../modules/nodegroup"
+  source          = "../../modules/nodegroup"
   cluster_name    = module.eks.cluster_name
   cluster_version = var.cluster_version
   private_subnets = module.vpc.private_subnets
-  cluster_service_ipv4_cidr = module.eks.cluster_service_ipv4_cidr
 }
 
 
@@ -31,9 +30,9 @@ module "nodegroup" {
 module "rds" {
   source = "../../modules/rds"
 
-  vpc_id          = module.vpc.vpc_id
-  db_subnets      = module.vpc.private_subnets
-  eks_node_sg_id  = module.eks.node_security_group_id
+  vpc_id         = module.vpc.vpc_id
+  db_subnets     = module.vpc.private_subnets
+  eks_node_sg_id = module.eks.node_security_group_id
 }
 
 module "alb_controller" {
