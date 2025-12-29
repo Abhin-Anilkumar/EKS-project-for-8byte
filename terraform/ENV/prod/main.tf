@@ -20,7 +20,6 @@ module "eks" {
 
 module "nodegroup" {
   source = "../../modules/nodegroup"
-
   cluster_name    = module.eks.cluster_name
   cluster_version = var.cluster_version
   private_subnets = module.vpc.private_subnets
