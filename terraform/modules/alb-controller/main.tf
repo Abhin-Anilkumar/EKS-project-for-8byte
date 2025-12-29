@@ -18,9 +18,20 @@ resource "aws_iam_role" "alb_controller" {
   })
 }
 
+data "http" "iam_policy" {
+  url = "https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/install/iam_policy.json"
+}
+
+resource "aws_iam_policy" "alb_controller" {
+  name        = "AWSLoadBalancerControllerIAMPolicy"
+  path        = "/"
+  description = "AWS Load Balancer Controller IAM Policy"
+  policy      = data.http.iam_policy.response_body
+}
+
 resource "aws_iam_policy_attachment" "alb_policy" {
   name       = "alb-policy"
   roles      = [aws_iam_role.alb_controller.name]
-  policy_arn = "arn:aws:iam::aws:policy/AWSLoadBalancerControllerIAMPolicy"
+  policy_arn = aws_iam_policy.alb_controller.arn
 }
 
