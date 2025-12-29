@@ -47,6 +47,6 @@ resource "aws_db_instance" "postgres" {
   db_subnet_group_name   = aws_db_subnet_group.this.name
 
   backup_retention_period = 7
-  skip_final_snapshot     = true
+  skip_final_snapshot     = false
 }
 
