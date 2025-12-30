@@ -6,6 +6,7 @@ module "vpc" {
 
   public_subnets  = var.public_subnets
   private_subnets = var.private_subnets
+  cluster_name    = var.cluster_name
 }
 
 module "eks" {
@@ -18,12 +19,12 @@ module "eks" {
   cluster_endpoint_public_access  = true
 }
 
-module "nodegroup" {
-  source          = "../../modules/nodegroup"
-  cluster_name    = module.eks.cluster_name
-  cluster_version = var.cluster_version
-  private_subnets = module.vpc.private_subnets
-}
+# module "nodegroup" {
+#   source          = "../../modules/nodegroup"
+#   cluster_name    = module.eks.cluster_name
+#   cluster_version = var.cluster_version
+#   private_subnets = module.vpc.private_subnets
+# }
 
 
 
