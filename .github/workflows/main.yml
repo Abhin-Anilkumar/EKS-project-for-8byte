@@ -34,8 +34,3 @@ jobs:
         run: |
           cd terraform/ENV/prod
           terraform validate
-
-      - name: Terraform Validate
-        run: |
-          cd terraform/ENV/prod
-          terraform validate
