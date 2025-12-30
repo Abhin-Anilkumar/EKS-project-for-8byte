@@ -9,7 +9,7 @@ module "node_group" {
 
   instance_types = ["t3.medium"]
 
-  min_size     = 2
-  desired_size = 2
+  min_size     = 3
+  desired_size = 4
   max_size     = 5
 }

@@ -43,6 +43,14 @@ module "alb_controller" {
   oidc_provider_arn = module.eks.oidc_provider_arn
 }
 
+module "ebs_csi_driver" {
+  source = "../../modules/ebs-csi-driver"
+
+  cluster_name      = var.cluster_name
+  oidc_provider     = module.eks.oidc_provider
+  oidc_provider_arn = module.eks.oidc_provider_arn
+}
+
 
 module "ecr" {
   source = "../../modules/ecr"
