@@ -1,65 +1,67 @@
-# EKS Infrastructure with Terraform
+# AWS EKS Infrastructure with Terraform
 
-This project provisions an Amazon EKS cluster and related infrastructure on AWS using Terraform.
-
-## Architecture Overview
-
-The configuration deploys the following resources:
-- **Network**: VPC with Public and Private subnets across multiple Availability Zones.
-- **Compute**: EKS Cluster (v1.34) with Managed Node Groups (t3.medium).
-- **Database**: Amazon RDS PostgreSQL instance (db.t3.medium, Multi-AZ).
-- **Security**: IAM Roles (IRSA), Security Groups, and KMS encryption for cluster secrets.
-- **Add-ons**: AWS Load Balancer Controller, CoreDNS, VPC CNI, EBS CSI Driver.
-
-## Prerequisites
-
-- Terraform >= 1.4.0
-- AWS CLI configured with appropriate credentials
+This repository contains the Terraform configuration to provision a production-grade AWS EKS cluster, including networking, database, and container orchestration components.
 
 ## Project Structure
 
-```
+The project follows a modular structure to ensure reusability and maintainability:
+
+```text
 terraform/
 ├── ENV/
-│   └── prod/          # Production environment implementation
-├── modules/
-│   ├── eks/           # EKS Cluster module wrapper
-│   ├── nodegroup/     # EKS Node Group module wrapper
-│   ├── rds/           # RDS Database module
-│   ├── vpc/           # VPC Networking module
-│   └── alb-controller/# AWS Load Balancer Controller module
+│   └── prod/               # Production environment deployment
+│       ├── main.tf         # Main orchestration of modules
+│       ├── variables.tf    # Input variables
+│       ├── terraform.tfvars # Environment-specific values
+│       ├── backend.tf      # Remote state configuration (S3/DynamoDB)
+│       ├── providers.tf    # AWS, Helm, and Kubernetes providers
+│       ├── helm.tf         # Helm releases (ALB Controller, etc.)
+│       └── outputs.tf      # Exported cluster and DB details
+└── modules/                # Reusable Infrastructure Modules
+    ├── vpc/                # Network: VPC, Subnets, IGW, NAT
+    ├── eks/                # Compute: EKS Cluster & Managed Node Groups
+    ├── rds/                # Database: PostgreSQL Instance
+    ├── alb-controller/     # Ingress: IAM roles for Load Balancer Controller
+    └── ecr/                # Registry: Container Repositories
 ```
 
-## Usage
+## Core Components
+
+- **VPC**: A dedicated VPC with public and private subnets across multiple AZs, tagged for ALB auto-discovery.
+- **EKS**: A managed Kubernetes cluster with a unified node group for consistent security and networking.
+- **RDS**: A private PostgreSQL instance for persistent data storage, accessible only from the EKS nodes.
+- **ALB Controller**: Configured with IRSA (IAM Roles for Service Accounts) to manage Application Load Balancers via Kubernetes Ingress.
+- **ECR**: Private repositories for frontend and backend microservices.
+
+## Prerequisites
+
+- **AWS CLI** configured with appropriate permissions.
+- **Terraform** (v1.0+) installed locally.
+- **kubectl** for cluster management.
+
+## Deployment Steps
 
 1. **Initialize Terraform**:
-   Navigate to the environment directory and initialize the project.
    ```bash
    cd terraform/ENV/prod
    terraform init
    ```
 
-2. **Review Plan**:
-   Generate a plan to preview changes.
+2. **Preview Changes**:
    ```bash
    terraform plan
    ```
 
-3. **Deploy**:
-   Apply the configuration to provision resources.
+3. **Apply Configuration**:
    ```bash
    terraform apply
    ```
 
-## Configuration
+4. **Update kubeconfig**:
+   ```bash
+   aws eks update-kubeconfig --region us-east-1 --name prod-eks
+   ```
 
-Key variables are defined in `terraform.tfvars`:
-- `aws_region`: AWS Region (e.g., `us-west-1`)
-- `cluster_version`: Kubernetes version (e.g., `1.34`)
-- `azs`: Availability Zones (Must be valid for the region, e.g., `us-west-1b`, `us-west-1c`)
-- `vpc_cidr`: CIDR block for the VPC
+## Remote State
 
-## Notes
-
-- **Module Versions**: The EKS and NodeGroup modules are pinned to `~> 19.0` to maintain compatibility with the existing code structure.
-- **Providers**: The AWS Provider is pinned to `~> 5.0` and Kubernetes Provider to `~> 2.23` to avoid deprecation warnings and compatibility issues.
+The infrastructure state is stored remotely in an S3 bucket with state locking via DynamoDB to prevent concurrent modifications. Configuration can be found in `ENV/prod/backend.tf`.
