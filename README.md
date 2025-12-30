@@ -356,13 +356,9 @@ velero install \
 
 **Log Groups**:
 - `/aws/eks/prod-eks/cluster`: EKS control plane logs
-- `/aws/containerinsights/prod-eks/application`: Application logs
 
 **Access Logs**:
 ```bash
-# View application logs
-aws logs tail /aws/containerinsights/prod-eks/application --follow
-
 # View control plane logs
 aws logs tail /aws/eks/prod-eks/cluster --follow
 ```
@@ -371,6 +367,7 @@ aws logs tail /aws/eks/prod-eks/cluster --follow
 
 ## 📚 Documentation
 
+- **[WALKTHROUGH.md](terraform/complete-walkthrough.md)**: **Complete step-by-step technical walkthrough** - Detailed explanation of every component, code, and deployment step
 - **[APPROACH.md](APPROACH.md)**: Detailed design rationale and architectural decisions
 - **[CHALLENGES.md](CHALLENGES.md)**: Issues encountered and resolutions
 - **[Application README](https://github.com/Abhin-Anilkumar/K8s-demo/blob/main/README.md)**: Microservices deployment guide
