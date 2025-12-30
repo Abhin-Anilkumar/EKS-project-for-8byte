@@ -34,3 +34,15 @@ jobs:
         run: |
           cd terraform/ENV/prod
           terraform validate
+
+      - name: Run Checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: terraform/
+          framework: terraform
+          quiet: true
+          soft_fail: true
+
+      - name: Notify Failure
+        if: failure()
+        run: echo "Terraform validation failed. Sending alert to team..."
