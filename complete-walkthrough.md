@@ -993,6 +993,47 @@ kubectl exec -it frontend-xxx -n app -- curl http://catalogue.app.svc.cluster.lo
 
 ---
 
+
+---
+
+## Proof of Deployment
+
+### Application Screenshots
+
+**Live Application at evoqu.in**:
+
+![Application Homepage](screenshot/App/Screenshot%202025-12-30%20at%203.37.17%20PM.png)
+*Craftista homepage showing origami showcase*
+
+![Origami Catalogue](screenshot/App/Screenshot%202025-12-30%20at%203.37.33%20PM.png)
+*Catalogue service displaying origami collection*
+
+![Voting Interface](screenshot/App/Screenshot%202025-12-30%20at%203.37.52%20PM.png)
+*Voting system in action*
+
+### Grafana Monitoring Dashboards
+
+**Infrastructure Monitoring**:
+
+![Grafana Login](screenshot/grafana/Screenshot%202025-12-30%20at%203.30.09%20PM.png)
+*Grafana login interface*
+
+![Infrastructure Overview Dashboard](screenshot/grafana/Screenshot%202025-12-30%20at%203.35.19%20PM.png)
+*Infrastructure dashboard showing node CPU, memory, disk, and network metrics*
+
+![Node Metrics](screenshot/grafana/Screenshot%202025-12-30%20at%203.35.55%20PM.png)
+*Detailed node-level metrics across all 5 EKS nodes*
+
+**Application Monitoring**:
+
+![Application Performance Dashboard](screenshot/grafana/Screenshot%202025-12-30%20at%203.36.15%20PM.png)
+*Application dashboard showing pod CPU/memory usage and restarts*
+
+![Pod Metrics](screenshot/grafana/Screenshot%202025-12-30%20at%203.36.48%20PM.png)
+*Detailed pod-level metrics for all microservices*
+
+---
+
 ## Summary
 
 ### What We Built
