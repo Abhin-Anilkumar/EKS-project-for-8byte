@@ -77,9 +77,11 @@ For detailed technical insights, please refer to:
 
 ## CI/CD Pipeline
 
-The project includes a GitHub Actions pipeline that performs:
-- **Terraform Validation**: Ensures code quality and formatting.
-- **Microservices Integrity**: (Optional/Planned) Automated linting and Docker build checks.
+The project implements a comprehensive CI/CD pipeline using **GitHub Actions**:
+- **Unit Testing**: Automated tests for Java, Go, Python, and Node.js microservices.
+- **Security Scanning**: Integrated **Trivy** for container images and **Checkov** for IaC compliance.
+- **Multi-Stage Deployment**: `test` -> `build` -> `staging` -> `manual approval` -> `production`.
+- **Infrastructure Validation**: Automatic Terraform validation and formatting checks.
 
 ---
 *Note: The Application Load Balancer is configured and ready to provision once account-level ELB creation restrictions are lifted.*
