@@ -1,67 +1,86 @@
-# AWS EKS Infrastructure with Terraform
+# Craftista EKS Microservices Project
 
-This repository contains the Terraform configuration to provision a production-grade AWS EKS cluster, including networking, database, and container orchestration components.
+A production-ready deployment of a multi-service craft application on AWS EKS using Terraform, Helm, and RDS.
 
-## Project Structure
+## Project Overview
 
-The project follows a modular structure to ensure reusability and maintainability:
+This project demonstrates the deployment of a microservices-based architecture on AWS. It includes a unified infrastructure managed via Terraform and a Kubernetes-orchestrated application layer.
 
-```text
-terraform/
-├── ENV/
-│   └── prod/               # Production environment deployment
-│       ├── main.tf         # Main orchestration of modules
-│       ├── variables.tf    # Input variables
-│       ├── terraform.tfvars # Environment-specific values
-│       ├── backend.tf      # Remote state configuration (S3/DynamoDB)
-│       ├── providers.tf    # AWS, Helm, and Kubernetes providers
-│       ├── helm.tf         # Helm releases (ALB Controller, etc.)
-│       └── outputs.tf      # Exported cluster and DB details
-└── modules/                # Reusable Infrastructure Modules
-    ├── vpc/                # Network: VPC, Subnets, IGW, NAT
-    ├── eks/                # Compute: EKS Cluster & Managed Node Groups
-    ├── rds/                # Database: PostgreSQL Instance
-    ├── alb-controller/     # Ingress: IAM roles for Load Balancer Controller
-    └── ecr/                # Registry: Container Repositories
+### Architecture
+
+```mermaid
+graph TD
+    Client[Browser/Client] --> ALB[AWS Application Load Balancer]
+    ALB --> Frontend[Frontend Pods]
+    Frontend --> Catalogue[Catalogue Service]
+    Frontend --> Voting[Voting Service]
+    Frontend --> Recommendation[Recommendation Service]
+    Voting --> RDS[(RDS PostgreSQL)]
+    Catalogue -.-> S3[Assets/Images]
 ```
 
-## Core Components
+## Documentation
 
-- **VPC**: A dedicated VPC with public and private subnets across multiple AZs, tagged for ALB auto-discovery.
-- **EKS**: A managed Kubernetes cluster with a unified node group for consistent security and networking.
-- **RDS**: A private PostgreSQL instance for persistent data storage, accessible only from the EKS nodes.
-- **ALB Controller**: Configured with IRSA (IAM Roles for Service Accounts) to manage Application Load Balancers via Kubernetes Ingress.
-- **ECR**: Private repositories for frontend and backend microservices.
+For detailed technical insights, please refer to:
+- **[APPROACH.md](APPROACH.md)**: Design rationale, networking strategy, and architectural decisions.
+- **[CHALLENGES.md](CHALLENGES.md)**: A log of hurdles encountered (Architecture mismatches, connectivity hangs) and their resolutions.
 
-## Prerequisites
+## Repository Structure
 
-- **AWS CLI** configured with appropriate permissions.
-- **Terraform** (v1.0+) installed locally.
-- **kubectl** for cluster management.
+```text
+.
+├── terraform/              # Infrastructure as Code (IaC)
+│   ├── ENV/prod/           # Production Environment orchestration
+│   └── modules/            # Reusable modules (VPC, EKS, RDS, ECR)
+├── K8s-demo/               # Application Source & Helm Charts
+│   ├── frontend/           # Node.js Frontend
+│   ├── catalogue/          # Python Catalogue API
+│   ├── voting/             # Java Voting Service
+│   └── recommendation/     # Go Recommendation Service
+├── APPROACH.md             # Technical rationale
+└── CHALLENGES.md           # Issue/Resolution log
+```
 
-## Deployment Steps
+## Infrastructure Highlights
 
-1. **Initialize Terraform**:
+- **VPC**: Multi-AZ with public/private subnet isolation.
+- **EKS**: Managed Kubernetes cluster with a unified node group for simplified networking.
+- **IAM (IRSA)**: Least-privilege access for the ALB controller using Service Account annotations.
+- **RDS**: Managed PostgreSQL persistence for the voting system.
+- **ECR**: Centralized repository for all AMD64-compatible Docker images.
+
+## Getting Started
+
+### Prerequisites
+
+- AWS CLI, Terraform, and kubectl installed.
+- Access to an AWS account with EKS and RDS permissions.
+
+### Deployment
+
+1. **Infrastructure**:
    ```bash
    cd terraform/ENV/prod
-   terraform init
+   terraform init && terraform apply
    ```
 
-2. **Preview Changes**:
-   ```bash
-   terraform plan
-   ```
-
-3. **Apply Configuration**:
-   ```bash
-   terraform apply
-   ```
-
-4. **Update kubeconfig**:
+2. **Connect to Cluster**:
    ```bash
    aws eks update-kubeconfig --region us-east-1 --name prod-eks
    ```
 
-## Remote State
+3. **Deploy Application**:
+   Navigate to each directory in `K8s-demo` and deploy using Helm:
+   ```bash
+   helm install voting ./voting/voting -n app
+   # (Repeat for other services)
+   ```
 
-The infrastructure state is stored remotely in an S3 bucket with state locking via DynamoDB to prevent concurrent modifications. Configuration can be found in `ENV/prod/backend.tf`.
+## CI/CD Pipeline
+
+The project includes a GitHub Actions pipeline that performs:
+- **Terraform Validation**: Ensures code quality and formatting.
+- **Microservices Integrity**: (Optional/Planned) Automated linting and Docker build checks.
+
+---
+*Note: The Application Load Balancer is configured and ready to provision once account-level ELB creation restrictions are lifted.*
