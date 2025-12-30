@@ -1,10 +1,9 @@
-# Craftista EKS Microservices Project
+# Craftista Infrastructure (EKS)
 
-A production-ready deployment of a multi-service craft application on AWS EKS using Terraform, Helm, and RDS.
+This repository contains the **Terraform Infrastructure as Code (IaC)** to provision a production-grade AWS EKS cluster.
 
-## Project Overview
-
-This project demonstrates the deployment of a microservices-based architecture on AWS. It includes a unified infrastructure managed via Terraform and a Kubernetes-orchestrated application layer.
+> [!NOTE]
+> **Application Repository**: The application source code and Helm charts are available at [K8s-demo](https://github.com/Abhin-Anilkumar/K8s-demo).
 
 ### Architecture
 
