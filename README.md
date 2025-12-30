@@ -367,7 +367,7 @@ aws logs tail /aws/eks/prod-eks/cluster --follow
 
 ## 📚 Documentation
 
-- **[WALKTHROUGH.md](terraform/complete-walkthrough.md)**: **Complete step-by-step technical walkthrough** - Detailed explanation of every component, code, and deployment step
+- **[WALKTHROUGH.md](complete-walkthrough.md)**: **Complete step-by-step technical walkthrough** - Detailed explanation of every component, code, and deployment step
 - **[APPROACH.md](APPROACH.md)**: Detailed design rationale and architectural decisions
 - **[CHALLENGES.md](CHALLENGES.md)**: Issues encountered and resolutions
 - **[Application README](https://github.com/Abhin-Anilkumar/K8s-demo/blob/main/README.md)**: Microservices deployment guide
